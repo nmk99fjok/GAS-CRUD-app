@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <base target="_top">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <v-app id="app">
+      <!-- ヘッダー -->
+      <v-app-bar absolute app color="blue" dark>
+        <v-toolbar-title>アプリ</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon>
+          <v-icon>mdi-file-table-outline</v-icon>
+        </v-btn>
+      </v-app-bar>
+
+      <!-- メイン -->
+      <v-main>
+        <v-container fluid>
+          <v-card>
+            <v-card-title>
+              <!-- ファイル選択 -->
+              <v-col cols="6">
+                <v-select
+                  v-model="selectedFileName"
+                  item-text="name"
+                  :items="fileName"
+                  label="閲覧するデータを選択します"
+                  hide-details
+                  prepend-icon="mdi-folder-account"
+                  return-object
+                  @change="updateSheetsList()"
+                ></v-select>
+              </v-col>
+
+              <v-spacer></v-spacer>
+              <!-- シート選択 -->
+              <v-col cols="6">
+                <v-card-actions class="ma-4">
+                  <v-radio-group v-model="selectedSheetName">
+                    <v-radio
+                      v-for="sheet in companySheets"
+                      :key="sheet.sheetName"
+                      :value="sheet"
+                      :label="`${sheet.sheetName}`"
+                      @click="updateTable()"
+                    ></v-radio>
+                  </v-radio-group>
+                </v-card-actions>
+              </v-col>
+
+              <!-- 検索フォーム -->
+              <v-col cols="6">
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  single-line
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col class="text-right" cols="6">
+                <!-- 追加ボタン -->
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark class="mr-4" color="blue" @click="open('add')" v-bind="attrs" v-on="on">
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>データを追加します</span>
+                </v-tooltip>
+                <!-- 新規シート追加ボタン -->
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark class="mr-4" color="blue-grey" @click="openAddSheetDialog" v-bind="attrs" v-on="on">
+                      <v-icon>mdi-plus-box-multiple</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>新規シートを追加します</span>
+                </v-tooltip>
+                <!-- 新規ファイル追加ボタン -->
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn dark color="grey" @click="openAddFileDialog" v-bind="attrs" v-on="on">
+                      <v-icon>mdi-file-plus</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>新規ファイルを追加します</span>
+                </v-tooltip>
+              </v-col>
+            </v-card-title>
+
+            <!-- テーブル -->
+            <v-data-table
+              class="text-no-wrap"
+              :headers="tableHeaders"
+              :items="tableData"
+              :search="search"
+              :footer-props="footerProps"
+              :loading="loading"
+              :sort-by="'date'"
+              :sort-desc="true"
+              :items-per-page="30"
+              show-expand
+              fixed-header
+              height="500"
+              mobile-breakpoint="0"
+            >
+              <!-- 追加／編集ボタン -->
+              <template v-slot:[`item.actions`]="{ item }">
+                <v-icon class="mr-2" @click="open('edit', item)">mdi-pencil</v-icon>
+                <v-icon @click="openDeleteDialog(item)">mdi-delete</v-icon>
+              </template>
+            </v-data-table>
+          </v-card>
+
+        </v-container>
+      </v-main>
+    </v-app>
+  </body>
+</html>
