@@ -47,11 +47,10 @@
                 <v-card-actions class="ma-4">
                   <v-radio-group v-model="selectedSheetName">
                     <v-radio
-                      v-for="sheet in companySheets"
+                      v-for="sheet in sheets"
                       :key="sheet.sheetName"
                       :value="sheet"
                       :label="`${sheet.sheetName}`"
-                      @click="updateTable()"
                     ></v-radio>
                   </v-radio-group>
                 </v-card-actions>
@@ -71,7 +70,7 @@
                 <!-- 追加ボタン -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn dark class="mr-4" color="blue" @click="open('add')" v-bind="attrs" v-on="on">
+                    <v-btn dark class="mr-4" color="blue" v-bind="attrs" v-on="on">
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </template>
@@ -80,7 +79,7 @@
                 <!-- 新規シート追加ボタン -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn dark class="mr-4" color="blue-grey" @click="openAddSheetDialog" v-bind="attrs" v-on="on">
+                    <v-btn dark class="mr-4" color="blue-grey" v-bind="attrs" v-on="on">
                       <v-icon>mdi-plus-box-multiple</v-icon>
                     </v-btn>
                   </template>
@@ -89,7 +88,7 @@
                 <!-- 新規ファイル追加ボタン -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn dark color="grey" @click="openAddFileDialog" v-bind="attrs" v-on="on">
+                    <v-btn dark color="grey" v-bind="attrs" v-on="on">
                       <v-icon>mdi-file-plus</v-icon>
                     </v-btn>
                   </template>
@@ -116,8 +115,8 @@
             >
               <!-- 追加／編集ボタン -->
               <template v-slot:[`item.actions`]="{ item }">
-                <v-icon class="mr-2" @click="open('edit', item)">mdi-pencil</v-icon>
-                <v-icon @click="openDeleteDialog(item)">mdi-delete</v-icon>
+                <v-icon class="mr-2" >mdi-pencil</v-icon>
+                <v-icon >mdi-delete</v-icon>
               </template>
             </v-data-table>
           </v-card>
@@ -126,4 +125,7 @@
       </v-main>
     </v-app>
   </body>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <?!= include('js'); ?>
+  <?!= include('appjs'); ?>
 </html>
