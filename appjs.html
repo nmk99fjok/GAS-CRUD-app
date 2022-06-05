@@ -1,0 +1,46 @@
+<script>
+  const app = new Vue({
+    el: '#app',
+    vuetify: new Vuetify(),
+
+    data () {
+      return {
+        loading: false,
+
+        search: '',
+
+        selectedFileName: '',
+        selectedSheetName: '',
+
+        fileName: [],
+        sheets: [],
+        tableData: [],
+      }
+    },
+
+    computed: {
+      tableHeaders () {
+        return [
+          { text: '日付', value: 'date', align: 'end', width: 120 },
+          { text: '操作', value: 'actions', sortable: false, width: 80 }
+        ]
+      },
+
+      footerProps () {
+        return { itemsPerPageText: '', itemsPerPageOptions: [] }
+      },
+    },
+
+    methods: {
+      async updateSheetsList () {
+        const sheetId = this.selectedFileName.sheetId
+
+        this.sheets = await connect.fetchSheet({ sheetId })
+      },
+    },
+
+    async created () {
+      this.fileName = await connect.fetch()
+    },
+  });
+</script>

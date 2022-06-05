@@ -1,0 +1,30 @@
+<script>
+  //GASでasync,awaitを使うための関数
+  function gasRun(func, ...args){
+    return new Promise(function(resolve, reject){
+      google.script.run.withSuccessHandler(function(...e){
+        console.log('成功')
+        resolve(...e);
+      }).withFailureHandler(function(...e){
+        console.log('失敗')
+        reject(...e);
+      })[func](...args);
+    });
+}
+</script>
+
+<script>
+  //code.gs内の関数を実行するオブジェクト
+  let connect = {
+    fetch: async function () {
+      let gs = await gasRun('getCompanySheets')
+
+      return gs
+    },
+    fetchSheet: async function ({ sheetId }) {
+      let gs = await gasRun('getSheetNames', { sheetId })
+
+      return gs
+    },
+  }
+</script>
