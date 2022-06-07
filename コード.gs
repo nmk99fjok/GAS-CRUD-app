@@ -90,3 +90,33 @@ function onGet ({ sheetId, sheetName }) {
 
   return list
 }
+
+/**
+ * 指定のデータを更新します
+ */
+function onPut ({ item, sheetId, sheetName }) {
+  const sheet = ss(sheetId).getSheetByName(sheetName)
+  if (sheet === null) {
+    return {
+      error: '指定のシートは存在しません'
+    }
+  }
+
+  const id = item.id
+  const lastRow = sheet.getLastRow()
+  const index = sheet.getRange('B3:B' + lastRow).getValues().flat().findIndex(v => v === id)
+
+  if (index === -1) {
+    return {
+      error: '指定のデータは存在しません'
+    }
+  }
+
+  const row = index + 3
+  const { date, title, memo } = item
+
+  const values = [["'" + date, "'" + title, "'" + memo]]
+  sheet.getRange(`C${row}:E${row}`).setValues(values)
+
+  return { id, date, title, memo }
+}
