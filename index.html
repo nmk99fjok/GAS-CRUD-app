@@ -51,6 +51,7 @@
                       :key="sheet.sheetName"
                       :value="sheet"
                       :label="`${sheet.sheetName}`"
+                      @click="updateTable()"
                     ></v-radio>
                   </v-radio-group>
                 </v-card-actions>
@@ -108,7 +109,6 @@
               :sort-by="'date'"
               :sort-desc="true"
               :items-per-page="30"
-              show-expand
               fixed-header
               height="500"
               mobile-breakpoint="0"

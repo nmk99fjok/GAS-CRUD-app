@@ -21,8 +21,10 @@
     computed: {
       tableHeaders () {
         return [
-          { text: '日付', value: 'date', align: 'end', width: 120 },
-          { text: '操作', value: 'actions', sortable: false, width: 80 }
+          { text: '日付', value: 'date', align: 'end' },
+          { text: 'タイトル', value: 'title', sortable: false },
+          { text: 'メモ', value: 'memo', sortable: false },
+          { text: '操作', value: 'actions', sortable: false }
         ]
       },
 
@@ -32,14 +34,30 @@
     },
 
     methods: {
+      /** 特定ファイル内のシート一覧の取得 */
       async updateSheetsList () {
         const sheetId = this.selectedFileName.sheetId
 
         this.sheets = await connect.fetchSheet({ sheetId })
       },
+      
+      /** シート内のデータをテーブルに反映させる */
+      async updateTable () {
+        const sheetId = this.selectedFileName.sheetId
+        const sheetName = this.selectedSheetName.sheetName
+
+        this.tableData = await connect.fetchTable({ sheetId, sheetName })
+      },
+    },
+
+    watch: {
+      selectedFileName () {
+        this.tableData = []
+      }
     },
 
     async created () {
+      /** ファイル一覧の取得 */
       this.fileName = await connect.fetch()
     },
   });

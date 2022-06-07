@@ -17,12 +17,17 @@
   //code.gs内の関数を実行するオブジェクト
   let connect = {
     fetch: async function () {
-      let gs = await gasRun('getCompanySheets')
+      let gs = await gasRun('getFileData')
 
       return gs
     },
     fetchSheet: async function ({ sheetId }) {
       let gs = await gasRun('getSheetNames', { sheetId })
+
+      return gs
+    },
+    fetchTable: async function ({ sheetId, sheetName }) {
+      let gs = await gasRun('onGet', { sheetId, sheetName })
 
       return gs
     },

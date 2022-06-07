@@ -1,5 +1,5 @@
 const ss = sheetId => SpreadsheetApp.openById(sheetId)
-const targetFolder = 'データを取得したいフォルダID'
+const targetFolder = 'データを取得したいフォルダ'
 
 function include (filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent()
@@ -15,7 +15,7 @@ function doGet (e) {
 }
 
 /**
- * 指定したフォルダー内のファイル一覧を取得します
+ * 指定したフォルダー(targetFolder)内のファイル一覧を取得します
  */
 function getFileData() {
   const files = DriveApp.getFolderById(targetFolder).getFiles();
@@ -51,3 +51,26 @@ function getSheetNames({ sheetId }) {
   return obj
 }
 
+/**
+ * シート内のデータ一覧を取得します
+ */
+function onGet ({ sheetId, sheetName }) {
+  const sheet = ss(sheetId).getSheetByName(sheetName)
+  const lastRow = sheet ? sheet.getLastRow() : 0
+
+  if (lastRow < 3) {
+    return []
+  }
+
+  const list = sheet.getRange('B3:E' + lastRow).getValues().map(row => {
+    const [id, date, title, memo] = row
+    return {
+      id,
+      date,
+      title,
+      memo
+    }
+  })
+
+  return list
+}
