@@ -120,3 +120,15 @@ function onPut ({ item, sheetId, sheetName }) {
 
   return { id, date, title, memo }
 }
+
+/**
+ * 指定シート&idのデータを削除します
+ */
+function onDelete ({ sheetId, sheetName, id }) {
+  const sheet = ss(sheetId).getSheetByName(sheetName)
+
+  const lastRow = sheet.getLastRow()
+  const index = sheet.getRange('B3:B' + lastRow).getValues().flat().findIndex(v => v === id)
+
+  sheet.deleteRow(index + 3)
+}

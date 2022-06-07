@@ -7,10 +7,12 @@
       return {
         loading: false,
         show: false, //ダイアログの表示状態
+        show2: false, //削除ダイアログの表示状態
         menu: false, //日付ダイアログの表示状態
         valid: false,
 
         search: '',
+
 
         selectedFileName: '', //選択ファイル名
         selectedSheetName: '', //選択シート名
@@ -19,6 +21,7 @@
         sheets: [], //シート一覧
         tableData: [], //シート内データの一覧
 
+        item: {},
         /** 操作タイプ 'add' or 'edit' */
         actionType: 'add',
         /** id */
@@ -64,12 +67,19 @@
         this.resetForm(item)
       },
 
+      /** データ削除ダイアログを開く */
+      openDeleteDialog (item) {
+        this.show2 = true
+        this.item = item
+      },
+
       /** ダイアログを閉じる */
       onClickClose () {
         this.show = false
+        this.show2 = false
       },
 
-      /** データの追加 */
+      /** データの追加/編集 */
       async onClickAction () {
         const item = {
           date: this.date,
@@ -94,6 +104,20 @@
         }
 
         this.show = false
+      },
+
+      /** データの削除を行う */
+      async onClickDelete () {
+        const sheetId = this.selectedFileName.sheetId
+        const sheetName = this.selectedSheetName.sheetName
+        const id = this.item.id
+
+        await connect.deleteData({ sheetId, sheetName, id })
+
+        const index = this.tableData.findIndex(v => v.id === id)
+        this.tableData.splice(index, 1)
+
+        this.show2 = false
       },
 
       /** 特定ファイル内のシート一覧の取得 */

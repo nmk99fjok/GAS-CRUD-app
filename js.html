@@ -41,5 +41,8 @@
 
       return gs
     },
+    deleteData: async function ({ sheetId, sheetName, id }) {
+      await gasRun('onDelete', { sheetId, sheetName, id })
+    },
   }
 </script>
