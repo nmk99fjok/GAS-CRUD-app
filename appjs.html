@@ -6,15 +6,26 @@
     data () {
       return {
         loading: false,
+        show: false, //ダイアログの表示状態
+        menu: false, //日付ダイアログの表示状態
 
         search: '',
 
-        selectedFileName: '',
-        selectedSheetName: '',
+        selectedFileName: '', //選択ファイル名
+        selectedSheetName: '', //選択シート名
 
-        fileName: [],
-        sheets: [],
-        tableData: [],
+        fileName: [], //ファイル一覧
+        sheets: [], //シート一覧
+        tableData: [], //シート内データの一覧
+
+        /** id */
+        id: '',
+        /** 日付 */
+        date: '',
+        /** タイトル */
+        title: '',
+        /** メモ */
+        memo: '',
       }
     },
 
@@ -34,6 +45,35 @@
     },
 
     methods: {
+      /** データ追加ダイアログを開く */
+      open (item) {
+        this.show = true
+        this.resetForm(item)
+      },
+
+      /** ダイアログを閉じる */
+      onClickClose () {
+        this.show = false
+      },
+
+      /** データの追加 */
+      async onClickAction () {
+        const item = {
+          date: this.date,
+          title: this.title,
+          memo: this.memo
+        }
+
+        const sheetId = this.selectedFileName.sheetId
+        const sheetName = this.selectedSheetName.sheetName
+        let result = null
+
+        result = await connect.addData({ item, sheetId, sheetName })
+        this.tableData.push(result)
+
+        this.show = false
+      },
+
       /** 特定ファイル内のシート一覧の取得 */
       async updateSheetsList () {
         const sheetId = this.selectedFileName.sheetId
@@ -48,6 +88,22 @@
 
         this.tableData = await connect.fetchTable({ sheetId, sheetName })
       },
+
+      /** フォームの内容を初期化する */ 
+      resetForm (item = {}) {
+        const today = new Date()
+        const year = today.getFullYear()
+        const month = ('0' + (today.getMonth() + 1)).slice(-2)
+        const date = ('0' + today.getDate()).slice(-2)
+
+        this.id = item.id || ''
+        this.date = item.date || `${year}-${month}-${date}`
+
+        this.title = item.title || ''
+        this.memo = item.memo || ''
+
+        this.$refs.form.resetValidation()
+      }
     },
 
     watch: {

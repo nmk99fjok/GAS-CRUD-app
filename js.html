@@ -31,5 +31,10 @@
 
       return gs
     },
+    addData: async function ({ item, sheetId, sheetName }) {
+      let gs = await gasRun('onPost', { item, sheetId, sheetName })
+
+      return gs
+    },
   }
 </script>

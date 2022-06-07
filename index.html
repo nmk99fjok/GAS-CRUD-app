@@ -71,7 +71,7 @@
                 <!-- 追加ボタン -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn dark class="mr-4" color="blue" v-bind="attrs" v-on="on">
+                    <v-btn dark class="mr-4" color="blue" @click="open()" v-bind="attrs" v-on="on">
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </template>
@@ -120,7 +120,8 @@
               </template>
             </v-data-table>
           </v-card>
-
+          <!-- データ追加ダイアログ -->
+          <?!= include('addDialog'); ?>
         </v-container>
       </v-main>
     </v-app>
