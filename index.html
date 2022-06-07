@@ -71,7 +71,7 @@
                 <!-- 追加ボタン -->
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-btn dark class="mr-4" color="blue" @click="open()" v-bind="attrs" v-on="on">
+                    <v-btn dark class="mr-4" color="blue" @click="open('add')" v-bind="attrs" v-on="on">
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
                   </template>
@@ -115,7 +115,7 @@
             >
               <!-- 追加／編集ボタン -->
               <template v-slot:[`item.actions`]="{ item }">
-                <v-icon class="mr-2" >mdi-pencil</v-icon>
+                <v-icon class="mr-2" @click="open('edit', item)">mdi-pencil</v-icon>
                 <v-icon >mdi-delete</v-icon>
               </template>
             </v-data-table>

@@ -36,5 +36,10 @@
 
       return gs
     },
+    editData: async function ({ item, sheetId, sheetName }) {
+      let gs = await gasRun('onPut', { item, sheetId, sheetName })
+
+      return gs
+    },
   }
 </script>

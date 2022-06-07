@@ -8,6 +8,7 @@
         loading: false,
         show: false, //ダイアログの表示状態
         menu: false, //日付ダイアログの表示状態
+        valid: false,
 
         search: '',
 
@@ -18,6 +19,8 @@
         sheets: [], //シート一覧
         tableData: [], //シート内データの一覧
 
+        /** 操作タイプ 'add' or 'edit' */
+        actionType: 'add',
         /** id */
         id: '',
         /** 日付 */
@@ -42,12 +45,22 @@
       footerProps () {
         return { itemsPerPageText: '', itemsPerPageOptions: [] }
       },
+
+      /** ダイアログのタイトル */
+      titleText () {
+        return this.actionType === 'add' ? 'データ追加' : 'データ編集'
+      },
+      /** ダイアログのアクション */
+      actionText () {
+        return this.actionType === 'add' ? '追加' : '更新'
+      }
     },
 
     methods: {
       /** データ追加ダイアログを開く */
-      open (item) {
+      open (actionType, item) {
         this.show = true
+        this.actionType = actionType
         this.resetForm(item)
       },
 
@@ -68,8 +81,17 @@
         const sheetName = this.selectedSheetName.sheetName
         let result = null
 
-        result = await connect.addData({ item, sheetId, sheetName })
-        this.tableData.push(result)
+        if (this.actionType === 'add') {
+          result = await connect.addData({ item, sheetId, sheetName })
+          this.tableData.push(result)
+        } else {
+          item.id = this.id
+
+          await connect.editData({ item, sheetId, sheetName })
+
+          const index = this.tableData.findIndex(V => V.id === item.id)
+          this.tableData.splice(index, 1, item)
+        }
 
         this.show = false
       },
