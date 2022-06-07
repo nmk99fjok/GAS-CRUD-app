@@ -1,0 +1,30 @@
+<!-- 削除ダイアログ -->
+<v-dialog
+  v-model="show2"
+  persistent
+  max-width="700"
+>
+  <v-card>
+    <v-card-title>データ削除</v-card-title>
+    <v-divider></v-divider>
+    <v-card-text class="black-text">
+      <!-- カテゴリ -->
+      <v-text-field
+        label="タイトル"
+        v-model="item.title"
+        readonly
+      ></v-text-field>
+      <!-- メモ -->
+      <v-textarea
+        label="メモ"
+        v-model="item.memo"
+        readonly
+      ></v-textarea>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="grey" text :disabled="loading" @click="onClickClose">キャンセル</v-btn>
+      <v-btn color="red" text :loading="loading" @click="onClickDelete">削除</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>

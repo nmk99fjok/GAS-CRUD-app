@@ -116,12 +116,13 @@
               <!-- 追加／編集ボタン -->
               <template v-slot:[`item.actions`]="{ item }">
                 <v-icon class="mr-2" @click="open('edit', item)">mdi-pencil</v-icon>
-                <v-icon >mdi-delete</v-icon>
+                <v-icon @click="openDeleteDialog(item)">mdi-delete</v-icon>
               </template>
             </v-data-table>
           </v-card>
           <!-- データ追加ダイアログ -->
           <?!= include('addDialog'); ?>
+          <?!= include('deleteDialog'); ?>
         </v-container>
       </v-main>
     </v-app>
