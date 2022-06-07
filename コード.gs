@@ -52,6 +52,22 @@ function getSheetNames({ sheetId }) {
 }
 
 /**
+ * データを追加します
+ */
+function onPost ({ item, sheetId, sheetName }) {
+  const { date, title, memo } = item
+
+  //指定した名前のシートを取得します
+  const sheet = ss(sheetId).getSheetByName(sheetName)
+
+  const id = Utilities.getUuid().slice(0, 8)
+  const row = ["'", "'" + id, "'" + date, "'" + title, "'" + memo]
+  sheet.appendRow(row)
+
+  return { id, date, title, memo }
+}
+
+/**
  * シート内のデータ一覧を取得します
  */
 function onGet ({ sheetId, sheetName }) {
